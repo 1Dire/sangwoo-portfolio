@@ -1,14 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { useControls } from "leva";
 import * as THREE from "three";
-export default function PlatformFortified({ item, index }) {
-  const model = useGLTF("./models/kenny_platformer/platform.glb");
+export default function Stone({ item, index }) {
+  const model = useGLTF("./models/kenny_platformer/stones.glb");
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
   });
   const { position, rotation, showFence } = useControls(
-    "Platform_" + (index + 1),
+    "Stone" + (index + 1),
     {
       position: {
         value: {

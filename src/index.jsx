@@ -27,18 +27,16 @@ root.render(
       map={[
         { name: "forward", keys: ["ArrowUp", "KeyW"] },
         { name: "backward", keys: ["ArrowDown", "KeyS"] },
-        { name: "leftward", keys: ["ArrowLeft", "KeyA"] },
-        { name: "rightward", keys: ["ArrowRight", "KeyD"] },
-        { name: "jump", keys: ["Space"] },
+        { name: "left", keys: ["ArrowLeft", "KeyA"] },
+        { name: "right", keys: ["ArrowRight", "KeyD"] },
+        { name: "run", keys: ["Shift"] },
       ]}
     >
       <Canvas
         shadows
-        camera={{
-          fov: 70,
-          near: 0.1,
-          far: 200,
-          position: [0, 10, 15],
+        camera={{ position: [3, 3, 3], near: 0.1, fov: 40 }}
+        style={{
+          touchAction: "none",
         }}
       >
         <AxesHelperComponent />

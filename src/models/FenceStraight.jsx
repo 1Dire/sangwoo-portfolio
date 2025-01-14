@@ -26,7 +26,8 @@ export default function FenceStraight({ item, index }) {
         },
         step: 0.1,
       },
-      showFence :true
+      showFence: true,
+      collapsed: true,
     }
   );
   return (

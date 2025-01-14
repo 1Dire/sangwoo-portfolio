@@ -5,7 +5,12 @@ import { useControls } from "leva";
 import * as THREE from "three";
 import PlatformFortified from "./models/PlatformFortified.jsx";
 import FenceStraight from "./models/FenceStraight.jsx";
-import { fenceData, platFormFortifiedData } from "./data/objectData.jsx";
+import Stone from "./models/Stone.jsx";
+import {
+  fenceData,
+  platFormFortifiedData,
+  stoneData,
+} from "./data/objectData.jsx";
 
 // 바닥
 
@@ -34,15 +39,18 @@ export default function World() {
 
   return (
     <>
-      <RigidBody type="kinematicPosition">
+      <RigidBody type="fixed" colliders="trimesh">
         <group position={[worldPostion.x, worldPostion.y, worldPostion.z]}>
           {show && <PlatForm position={[0, 0, 0]} scale={scale} />}
-      
+
           {platFormFortifiedData.map((item, index) => (
             <PlatformFortified key={index} item={item} index={index} />
           ))}
           {fenceData.map((item, index) => (
             <FenceStraight key={index} item={item} index={index} />
+          ))}
+          {stoneData.map((item, index) => (
+            <Stone key={index} item={item} index={index} />
           ))}
         </group>
       </RigidBody>
