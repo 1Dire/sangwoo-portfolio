@@ -1,18 +1,23 @@
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import { barracksData } from "../../data/objectData.jsx";
+import { bridgeData } from "../../data/objectData.jsx";
 import { folder, useControls } from "leva";
-useGLTF.preload("./models/keyKit/object/barracks.glb");
-function BarracksGenerate({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/barracks.glb");
+useGLTF.preload("./models/keyKit/object/bridge.glb");
+function BridgeGenerate({ item, index }) {
+  const model = useGLTF("./models/keyKit/object/bridge.glb");
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
+    mesh.material.polygonOffset = true;
+    mesh.material.polygonOffsetFactor = 1; 
+    mesh.material.polygonOffsetUnits = 1; 
+   
+
   });
 
-  const { position, rotation, show } = useControls(
-    "Barracks_" + (index + 1),
+  const { position, rotation, show, clickEvent } = useControls(
+    "Bridge_" + (index + 1),
     {
       position: {
         value: {
@@ -31,6 +36,7 @@ function BarracksGenerate({ item, index }) {
         step: 0.1,
       },
       show: true,
+      clickEvent: false,
     },
     { collapsed: true }
   );
@@ -52,7 +58,9 @@ function BarracksGenerate({ item, index }) {
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
-            console.log("Barracks_" + (index + 1));
+            if (clickEvent) {
+              console.log("Bridge_" + (index + 1));
+            }
           }}
         >
           <primitive object={model.scene.clone()} />
@@ -62,12 +70,13 @@ function BarracksGenerate({ item, index }) {
   );
 }
 
-export default function Barracks() {
+export default function Bridge() {
   return (
     <>
-      {barracksData.map((item, index) => (
-        <BarracksGenerate item={item} key={index} index={index} />
-      ))}
+    {bridgeData.map((item, index) => (
+           <BridgeGenerate item={item} key={index} index={index} />
+         ))}
+     
     </>
   );
 }

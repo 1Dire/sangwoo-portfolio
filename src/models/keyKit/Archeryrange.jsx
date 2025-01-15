@@ -11,7 +11,7 @@ function ArcheryrangeGenerate({ item, index }) {
     mesh.receiveShadow = true;
   });
 
-  const { position, rotation, show } = useControls(
+  const { position, rotation, show,clickEvent } = useControls(
     "Archeryrange_" + (index + 1),
     {
       position: {
@@ -31,6 +31,7 @@ function ArcheryrangeGenerate({ item, index }) {
         step: 0.1,
       },
       show: true,
+      clickEvent:false,
     },
     { collapsed: true }
   );
@@ -52,7 +53,9 @@ function ArcheryrangeGenerate({ item, index }) {
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
-            console.log("Archeryrange_" + (index + 1));
+            if (clickEvent) {
+              console.log("Archeryrange_" + (index + 1));
+            }
           }}
         >
           <primitive object={model.scene.clone()} />

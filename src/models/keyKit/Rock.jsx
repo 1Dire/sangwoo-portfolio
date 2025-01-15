@@ -1,18 +1,19 @@
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import { barracksData } from "../../data/objectData.jsx";
+import { rockData } from "../../data/objectData.jsx";
 import { folder, useControls } from "leva";
-useGLTF.preload("./models/keyKit/object/barracks.glb");
-function BarracksGenerate({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/barracks.glb");
+useGLTF.preload("./models/keyKit/object/detail_rocks_small.glb");
+
+function DetailRockSmall({ item, index }) {
+  const model = useGLTF("./models/keyKit/object/detail_rocks_small.glb");
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
   const { position, rotation, show, clickEvent } = useControls(
-    "Barracks_" + (index + 1),
+    "DetailRockSmall_" + (index + 1),
     {
       position: {
         value: {
@@ -54,7 +55,7 @@ function BarracksGenerate({ item, index }) {
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
-              console.log("Barracks_" + (index + 1));
+              console.log("DetailRockSmall_" + (index + 1));
             }
           }}
         >
@@ -65,11 +66,14 @@ function BarracksGenerate({ item, index }) {
   );
 }
 
-export default function Barracks() {
+export default function Rock() {
+  const detailRocksSmall = rockData.filter(
+    (item) => item.type === "detail_rocks_small"
+  );
   return (
     <>
-      {barracksData.map((item, index) => (
-        <BarracksGenerate item={item} key={index} index={index} />
+      {detailRocksSmall.map((item, index) => (
+        <DetailRockSmall item={item} key={index} index={index} />
       ))}
     </>
   );
