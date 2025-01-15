@@ -371,7 +371,6 @@ function HexForestWaterBDetail({ item, index }) {
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
   });
-  console.log(model)
   const { position, rotation, show, clickEvent } = useControls(
     "Hex_forest_waterB_detail_" + (index + 1),
     {
