@@ -2,7 +2,6 @@ import { OrbitControls } from "@react-three/drei";
 import Lights from "./Lights.jsx";
 
 import { Physics } from "@react-three/rapier";
-import * as THREE from "three";
 import { CharacterController } from "./CharacterController";
 
 import World from "./World.jsx";

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
 import { Character } from "./Character";
+import * as THREE from "three";
 
 const normalizeAngle = (angle) => {
   while (angle > Math.PI) angle -= 2 * Math.PI;
@@ -29,24 +30,48 @@ const lerpAngle = (start, end, t) => {
 };
 
 export const CharacterController = () => {
-  const { WALK_SPEED, RUN_SPEED, ROTATION_SPEED } = useControls(
-    "Character Control",
-    {
-      WALK_SPEED: { value: 0.8, min: 0.1, max: 4, step: 0.1 },
-      RUN_SPEED: { value: 1.6, min: 0.2, max: 12, step: 0.1 },
-      ROTATION_SPEED: {
-        value: degToRad(0.5),
-        min: degToRad(0.1),
-        max: degToRad(5),
-        step: degToRad(0.1),
+  const {
+    position,
+    rotation,
+    walk_speed,
+    run_speed,
+    rotation_speed,
+    touch_event,
+    reset_Y
+  } = useControls("Character Control", {
+    touch_event: false,
+    position: {
+      value: {
+        x: 0,
+        y: 5,
+        z: 0,
       },
-    }
-  );
+      step: 0.1,
+    },
+    rotation: {
+      value: {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      step: 0.1,
+    },
+    reset_Y: -25,
+    walk_speed: { value: 0.8, min: 0.1, max: 4, step: 0.1 },
+    run_speed: { value: 1.6, min: 0.2, max: 12, step: 0.1 },
+    rotation_speed: {
+      value: degToRad(0.5),
+      min: degToRad(0.1),
+      max: degToRad(5),
+      step: degToRad(0.1),
+    },
+  },{collapsed:true});
   const rb = useRef();
   const container = useRef();
   const character = useRef();
 
   const [animation, setAnimation] = useState("idle");
+  const [isJumping, setIsJumping] = useState(false);
   const characterRotationTarget = useRef(0);
   const rotationTarget = useRef(0);
   const cameraTarget = useRef();
@@ -59,14 +84,13 @@ export const CharacterController = () => {
   const isClicking = useRef(false);
   useEffect(() => {
     const onMouseDown = (e) => {
-      isClicking.current = true;
+      if (touch_event) isClicking.current = true;
     };
     const onMouseUp = (e) => {
-      isClicking.current = false;
+      if (touch_event) isClicking.current = false;
     };
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
-    // touch
     document.addEventListener("touchstart", onMouseDown);
     document.addEventListener("touchend", onMouseUp);
     return () => {
@@ -75,7 +99,8 @@ export const CharacterController = () => {
       document.removeEventListener("touchstart", onMouseDown);
       document.removeEventListener("touchend", onMouseUp);
     };
-  }, []);
+  }, [touch_event]);
+
   useFrame(({ camera, mouse }) => {
     if (rb.current) {
       const vel = rb.current.linvel();
@@ -83,34 +108,33 @@ export const CharacterController = () => {
         x: 0,
         z: 0,
       };
-      if (get().forward) {
-        movement.z = 1;
-      }
-      if (get().backward) {
-        movement.z = -1;
-      }
-      let speed = get().run ? RUN_SPEED : WALK_SPEED;
+
+      if (get().forward) movement.z = 1;
+      if (get().backward) movement.z = -1;
+
+      let speed = get().run ? run_speed : walk_speed;
 
       if (isClicking.current) {
-        console.log("clicking", mouse.x, mouse.y);
-        if (Math.abs(mouse.x) > 0.1) {
-          movement.x = -mouse.x;
-        }
+        if (Math.abs(mouse.x) > 0.1) movement.x = -mouse.x;
         movement.z = mouse.y + 0.4;
         if (Math.abs(movement.x) > 0.5 || Math.abs(movement.z) > 0.5) {
-          speed = RUN_SPEED;
+          speed = run_speed;
         }
       }
 
-      if (get().left) {
-        movement.x = 1;
+      if (get().left) movement.x = 1;
+      if (get().right) movement.x = -1;
+
+      if (get().jump && !isJumping) {
+        setIsJumping(true);
+        vel.y = 3; // Jump force
+        setAnimation("jump_up");
       }
-      if (get().right) {
-        movement.x = -1;
+
+      if (isJumping && rb.current.translation().y > 0.15) {
+        setAnimation("jump_air");
       }
-      if (movement.x != 0) {
-        rotationTarget.current += ROTATION_SPEED * movement.x;
-      }
+
       if (movement.x !== 0 || movement.z !== 0) {
         characterRotationTarget.current = Math.atan2(movement.x, movement.z);
         vel.x =
@@ -119,14 +143,29 @@ export const CharacterController = () => {
         vel.z =
           Math.cos(rotationTarget.current + characterRotationTarget.current) *
           speed;
-        if (speed === RUN_SPEED) {
+        if (speed === run_speed && !isJumping) {
           setAnimation("run");
-        } else {
+        } else if (!isJumping) {
           setAnimation("walk");
         }
-      } else {
+      } else if (!isJumping) {
         setAnimation("idle");
       }
+
+      if (rb.current.translation().y <= 0.15) {
+        setIsJumping(false);
+        if (movement.x === 0 && movement.z === 0) {
+          setAnimation("idle");
+        }
+      }
+      if (rb.current) {
+        const position = rb.current.translation(); // 현재 좌표 가져오기
+          if(position.y <reset_Y){
+            rb.current.setTranslation({ x: 0, y: 0, z: -5.2 }, true); // 위치 초기화
+            rb.current.setLinvel({ x: 0, y: 0, z: 0 }, true); // 속도 초기화
+          }
+      }
+
       character.current.rotation.y = lerpAngle(
         character.current.rotation.y,
         characterRotationTarget.current,
@@ -135,7 +174,6 @@ export const CharacterController = () => {
       rb.current.setLinvel(vel, true);
     }
 
-    //camera
     container.current.rotation.y = MathUtils.lerp(
       container.current.rotation.y,
       rotationTarget.current,
@@ -150,11 +188,22 @@ export const CharacterController = () => {
       camera.lookAt(cameraLookAt.current);
     }
   });
+
   return (
-    <RigidBody colliders={false} lockRotations ref={rb}>
+    <RigidBody
+      colliders={false}
+      lockRotations
+      ref={rb}
+      position={[position.x, position.y, position.z]}
+      rotation={[
+        THREE.MathUtils.degToRad(rotation.x),
+        THREE.MathUtils.degToRad(rotation.y),
+        THREE.MathUtils.degToRad(rotation.z),
+      ]}
+    >
       <group ref={container}>
         <group ref={cameraTarget} position-z={1.5} />
-        <group ref={cameraPostion} position-y={4} position-z={-4} />
+        <group ref={cameraPostion} position-x={0} position-y={3} position-z={-4} />
         <group ref={character}>
           <Character scale={0.18} position-y={-0.075} animation={animation} />
         </group>

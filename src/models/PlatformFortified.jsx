@@ -2,12 +2,16 @@ import React, { useEffect } from "react";
 import { useGLTF } from "@react-three/drei";
 import { useControls } from "leva";
 import * as THREE from "three";
+import { RigidBody } from "@react-three/rapier";
+useGLTF.preload("./models/kenny_platformer/platform.glb");
 export default function PlatformFortified({ item, index }) {
   const model = useGLTF("./models/kenny_platformer/platform.glb");
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
+    mesh.receiveShadow = true;
   });
-  const { position, rotation, showFence } = useControls(
+
+  const { position, rotation, show } = useControls(
     "Platform_" + (index + 1),
     {
       position: {
@@ -26,23 +30,30 @@ export default function PlatformFortified({ item, index }) {
         },
         step: 0.1,
       },
-      showFence: true,
-      collapsed: true, 
-    }
+      show: true,
+    },{collapsed:true}
   );
   return (
     <>
-      {showFence && (
+    {show && (
+      <RigidBody
+        type="fixed" 
+        position={[position.x, position.y, position.z]} 
+        rotation={[
+          THREE.MathUtils.degToRad(rotation.x),
+          THREE.MathUtils.degToRad(rotation.y),
+          THREE.MathUtils.degToRad(rotation.z),
+        ]} 
+        mass={0} 
+        colliders="hull" 
+      >
         <primitive
           object={model.scene.clone()}
-          position={[position.x, position.y, position.z]}
-          rotation={[
-            THREE.MathUtils.degToRad(rotation.x),
-            THREE.MathUtils.degToRad(rotation.y),
-            THREE.MathUtils.degToRad(rotation.z),
-          ]}
+          position={[0, 0, 0]} 
+          rotation={[0, 0, 0]} 
         />
-      )}
-    </>
+      </RigidBody>
+    )}
+  </>
   );
 }

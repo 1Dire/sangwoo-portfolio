@@ -1,0 +1,32 @@
+export const floorData = [
+  { position: [-1, 0, 5], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [-2, 0, 3.4], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [-4, 0, 0], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [-3, 0, 1.7], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [-2, 0, 0], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [0, 0, 0], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [1, 0, 1.7], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [-1, 0, 1.7], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [2, 0, 0], rotation: [0, 0, 0], type: "hex_forest_detail" },
+
+  { position: [4, 0, 0], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [5, 0, 1.7], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [6, 0, 0], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [7, 0, 1.7], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [8, 0, 0], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [9, 0, 1.7], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [0, 0, 3.4], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [2, 0, 3.4], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [4, 0, 3.4], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [6, 0, 3.4], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [8, 0, 3.4], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [10, 0, 3.4], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [1, 0, 5], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [3, 0, 5], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [5, 0, 5], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [7, 0, 5], rotation: [0, 0, 0], type: "hex_forest_detail" },
+  { position: [9, 0, 5], rotation: [0, 0, 0], type: "hex_forest_detail" },
+];
+export const waterData = [
+  { position: [3, 0, 1.7], rotation: [0, 0, 0], type: "hex_water" },
+];

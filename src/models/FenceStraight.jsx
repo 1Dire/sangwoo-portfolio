@@ -2,12 +2,14 @@ import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { useControls } from "leva";
 import * as THREE from "three";
+useGLTF.preload("./models/kenny_platformer/fence-straight.glb");
 export default function FenceStraight({ item, index }) {
   const model = useGLTF("./models/kenny_platformer/fence-straight.glb");
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
+    mesh.receiveShadow = true;
   });
-  const { position, rotation, showFence } = useControls(
+  const { position, rotation, show } = useControls(
     "Fence_" + (index + 1),
     {
       position: {
@@ -26,13 +28,13 @@ export default function FenceStraight({ item, index }) {
         },
         step: 0.1,
       },
-      showFence: true,
-      collapsed: true,
-    }
+      show: true,
+    },
+    { collapsed: true }
   );
   return (
     <>
-      {showFence && (
+      {show && (
         <primitive
           object={model.scene.clone()}
           position={[position.x, position.y, position.z]}

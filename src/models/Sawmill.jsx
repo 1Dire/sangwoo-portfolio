@@ -2,14 +2,19 @@ import React from "react";
 import { useGLTF } from "@react-three/drei";
 import { useControls } from "leva";
 import * as THREE from "three";
-useGLTF.preload("./models/kenny_platformer/stones.glb");
-export default function Stone({ item, index }) {
-  const model = useGLTF("./models/kenny_platformer/stones.glb");
-  model.scene.children.forEach((mesh) => {
+import { RigidBody } from "@react-three/rapier";
+
+useGLTF.preload("./models/etc/fantasy/Fantasy_Sawmill.glb");
+
+export default function Sawmill({ item, index }) {
+  const { scene } = useGLTF("./models/etc/fantasy/Fantasy_Sawmill.glb");
+
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
-  const { position, rotation, showFence } = useControls("Stone" + (index + 1), {
+
+  const { position, rotation, show } = useControls("Sawmill_" + (index + 1), {
     position: {
       value: {
         x: item.position[0],
@@ -26,21 +31,29 @@ export default function Stone({ item, index }) {
       },
       step: 0.1,
     },
-    showFence: true,
-    collapsed: true,
-  });
+    show: true,
+  },{collapsed:false});
+
   return (
     <>
-      {showFence && (
-        <primitive
-          object={model.scene.clone()}
+      {show && (
+        <RigidBody
+          type="fixed"
           position={[position.x, position.y, position.z]}
           rotation={[
             THREE.MathUtils.degToRad(rotation.x),
             THREE.MathUtils.degToRad(rotation.y),
             THREE.MathUtils.degToRad(rotation.z),
           ]}
-        />
+          mass={0}
+          colliders="hull"
+        >
+          <primitive
+            object={scene.clone()}
+            position={[0, 0, 0]}
+            rotation={[0, 0, 0]}
+          />
+        </RigidBody>
       )}
     </>
   );
