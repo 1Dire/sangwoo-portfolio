@@ -4,7 +4,7 @@ import { RigidBody } from "@react-three/rapier";
 
 import Floor from "./models/Floor.jsx";
 import Archeryrange from "./models/keyKit/Archeryrange.jsx";
-import Barracks from "./models/keyKit/barracks.jsx";
+import Barracks from "./models/keyKit/Barracks.jsx";
 import Rock from "./models/keyKit/Rock.jsx";
 import Forest from "./models/keyKit/Forest.jsx";
 import Bridge from "./models/keyKit/Bridge.jsx";
