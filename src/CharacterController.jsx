@@ -39,7 +39,7 @@ export const CharacterController = () => {
     touch_event,
     reset_Y
   } = useControls("Character Control", {
-    touch_event: false,
+    touch_event: true,
     position: {
       value: {
         x: 0,
@@ -56,7 +56,7 @@ export const CharacterController = () => {
       },
       step: 0.1,
     },
-    reset_Y: -25,
+    reset_Y: -5,
     walk_speed: { value: 0.8, min: 0.1, max: 4, step: 0.1 },
     run_speed: { value: 1.6, min: 0.2, max: 12, step: 0.1 },
     rotation_speed: {
@@ -161,7 +161,7 @@ export const CharacterController = () => {
       if (rb.current) {
         const position = rb.current.translation(); // 현재 좌표 가져오기
           if(position.y <reset_Y){
-            rb.current.setTranslation({ x: 0, y: 0, z: -5.2 }, true); // 위치 초기화
+            rb.current.setTranslation({ x: 0, y: 5, z: 0 }, true); // 위치 초기화
             rb.current.setLinvel({ x: 0, y: 0, z: 0 }, true); // 속도 초기화
           }
       }
