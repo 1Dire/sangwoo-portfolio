@@ -5,6 +5,8 @@ import Experience from "./Experience.jsx";
 import { StrictMode, useEffect } from "react";
 import * as THREE from "three";
 import { KeyboardControls } from "@react-three/drei";
+import LodingScreen from "./LodingScreen.jsx";
+import CloudySky from "./CloudySky.jsx";
 
 function AxesHelperComponent() {
   const { scene } = useThree(); // useThree 훅을 사용하여 scene에 접근
@@ -40,11 +42,11 @@ root.render(
           touchAction: "none",
         }}
       >
-    
-        
+        <CloudySky/>
         <AxesHelperComponent />
         <Experience />
       </Canvas>
+      <LodingScreen/>
     </KeyboardControls>
   </StrictMode>
 );

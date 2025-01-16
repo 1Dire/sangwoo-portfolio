@@ -17,7 +17,7 @@ export default function Lights() {
   } = useControls(
     "Directional Light",
     {
-      intensity: { value: 4.5, min: 0, max: 10, step: 0.1 },
+      intensity: { value: 3, min: 0, max: 10, step: 0.1 },
       positionX: { value: 4, min: -10, max: 10, step: 0.1 },
       positionY: { value: 4, min: -10, max: 10, step: 0.1 },
       positionZ: { value: 1, min: -10, max: 10, step: 0.1 },
@@ -31,7 +31,7 @@ export default function Lights() {
   const { ambientIntensity } = useControls(
     "Ambient Light",
     {
-      ambientIntensity: { value: 1.5, min: 0, max: 10, step: 0.1 },
+      ambientIntensity: { value: 0.2, min: 0, max: 10, step: 0.1 },
     },
     { collapsed: true }
   );
