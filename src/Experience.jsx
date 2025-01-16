@@ -12,7 +12,7 @@ export default function Experience() {
 
       <Lights />
       <Physics>
-        <CharacterController />
+        <CharacterController /> 
         <World />
       </Physics>
     </>

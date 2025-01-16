@@ -64,7 +64,7 @@ export const forestData = [
   {
     position: [7, 1, 1.7],
     rotation: [0, 37, 0],
-    type: "B",
+    type: "C",
   },
 ];
 export const bridgeData = [
@@ -153,7 +153,7 @@ export const grassPlant = [
     scale: 0.2,
   },
   {
-    position: [6.1, 1, 1.9],
+    position: [6.1, 1, 1.2],
     rotation: [0, 0, 0],
     scale: 0.2,
   },
