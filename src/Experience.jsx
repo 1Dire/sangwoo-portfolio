@@ -11,9 +11,9 @@ export default function Experience() {
       {/* <OrbitControls makeDefault /> */}
 
       <Lights />
-      <Physics  >
-        <World />
+      <Physics>
         <CharacterController />
+        <World />
       </Physics>
     </>
   );

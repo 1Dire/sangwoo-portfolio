@@ -47,7 +47,7 @@ function WatermillGenerate({ item, index }) {
   // useFrame을 사용하여 물레방아 휠 회전
   useFrame((state, delta) => {
     if (wheelRef.current) {
-      wheelRef.current.rotation.x += rotationSpeed * delta; 
+      wheelRef.current.rotation.x +=  delta; 
     }
   });
 

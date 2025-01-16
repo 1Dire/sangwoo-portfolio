@@ -6,7 +6,15 @@ export default function Lights() {
   const light = useRef();
 
   // Leva 컨트롤 추가
-  const { intensity, positionX, positionY, positionZ, shadowMapSize, shadowBias, shadowRadius } = useControls(
+  const {
+    intensity,
+    positionX,
+    positionY,
+    positionZ,
+    shadowMapSize,
+    shadowBias,
+    shadowRadius,
+  } = useControls(
     "Directional Light",
     {
       intensity: { value: 4.5, min: 0, max: 10, step: 0.1 },
@@ -16,15 +24,24 @@ export default function Lights() {
       shadowMapSize: { value: 1024, options: [256, 512, 1024, 2048] },
       shadowBias: { value: -0.005, min: -0.01, max: 0.01, step: 0.001 }, // 그림자 편향 설정
       shadowRadius: { value: 4, min: 1, max: 10, step: 0.1 }, // 그림자 반경 설정
-    }
+    },
+    { collapsed: true }
   );
 
-  const { ambientIntensity } = useControls("Ambient Light", {
-    ambientIntensity: { value: 1.5, min: 0, max: 10, step: 0.1 },
-  });
+  const { ambientIntensity } = useControls(
+    "Ambient Light",
+    {
+      ambientIntensity: { value: 1.5, min: 0, max: 10, step: 0.1 },
+    },
+    { collapsed: true }
+  );
 
   useFrame((state) => {
-    light.current.position.set(positionX, positionY, state.camera.position.z + positionZ - 4);
+    light.current.position.set(
+      positionX,
+      positionY,
+      state.camera.position.z + positionZ - 4
+    );
     light.current.target.position.set(0, 0, state.camera.position.z - 4);
     light.current.target.updateMatrixWorld();
   });

@@ -65,6 +65,13 @@ function HexForestDetail({ item, index }) {
           colliders="hull"
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
@@ -124,6 +131,13 @@ function HexForestRoadA({ item, index }) {
           colliders="hull"
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
@@ -183,6 +197,13 @@ function HexForestRoadB({ item, index }) {
           mass={0}
           scale={1}
           colliders="hull"
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
@@ -241,7 +262,13 @@ function HexForestRoadDDetail({ item, index }) {
           ]}
           mass={0}
           scale={1}
-          
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
@@ -302,6 +329,13 @@ function HexForestRoadEDetail({ item, index }) {
           mass={0}
           scale={1}
           colliders="hull"
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
@@ -361,6 +395,13 @@ function HexForestTransitionA({ item, index }) {
           colliders="hull"
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
@@ -419,6 +460,13 @@ function HexForestWaterBDetail({ item, index }) {
           ]}
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
@@ -478,6 +526,13 @@ function HexRock({ item, index }) {
           ]}
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
@@ -536,6 +591,13 @@ function HexRockRoadA({ item, index }) {
           ]}
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
@@ -595,6 +657,13 @@ function HexRockRoadB({ item, index }) {
           ]}
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
@@ -654,6 +723,13 @@ function HexRockRoadD({ item, index }) {
           ]}
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
@@ -713,6 +789,13 @@ function HexWater({ item, index }) {
           ]}
           mass={0}
           scale={1}
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
@@ -774,6 +857,13 @@ function HexWaterDetail({ item, index }) {
           mass={0}
           scale={1}
           colliders="hull"
+          onUpdate={(obj) => {
+            obj.traverse((child) => {
+              if (child.isMesh) {
+                child.material.depthBias = 0.001;  
+              }
+            });
+          }}
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {

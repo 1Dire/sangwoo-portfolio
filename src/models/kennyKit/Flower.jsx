@@ -34,7 +34,7 @@ function FlowerTypeA({ item, index }) {
       },
       show: true,
       clickEvent: false,
-      scale : 0.5
+      scale :item.scale
     },
     { collapsed: true }
   );
@@ -94,7 +94,7 @@ function FlowerTypeB({ item, index }) {
         step: 0.1,
       },
       show: true,
-      scale:0.5,
+      scale:item.scale,
       clickEvent: false,
     },
     { collapsed: true }

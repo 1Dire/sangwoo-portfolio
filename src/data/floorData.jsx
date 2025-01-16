@@ -58,7 +58,7 @@ export const floorData = [
   
 ];
 export const waterData = [
-  // hex_water
+ 
   { position: [5, 0, 1.7], rotation: [0, 0, 0], type: "hex_water_detail" },
   { position: [3, 0, 1.7], rotation: [0, 0, 0], type: "hex_water_detail" },
 

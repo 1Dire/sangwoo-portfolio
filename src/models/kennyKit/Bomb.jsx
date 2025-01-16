@@ -1,21 +1,18 @@
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import { bridgeData } from "../../data/objectData.jsx";
+import { bombData } from "../../data/objectData.jsx";
 import { folder, useControls } from "leva";
-useGLTF.preload("./models/keyKit/object/bridge.glb");
-
-function BridgeGenerate({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/bridge.glb");
+useGLTF.preload("./models/kennyKit/object/platformer/bomb.glb");
+function BombGenerate({ item, index }) {
+  const model = useGLTF("./models/kennyKit/object/platformer/bomb.glb");
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
-    mesh.material.polygonOffset = true;
-    mesh.material.polygonOffsetFactor = 1; 
-    mesh.material.polygonOffsetUnits = 1; 
+    mesh.receiveShadow = true;
   });
 
-  const { position, rotation, show, clickEvent } = useControls(
-    "Bridge_" + (index + 1),
+  const { position, rotation, show, clickEvent, scale } = useControls(
+    "Bomb_" + (index + 1),
     {
       position: {
         value: {
@@ -33,6 +30,7 @@ function BridgeGenerate({ item, index }) {
         },
         step: 0.1,
       },
+      scale: item.scale,
       show: true,
       clickEvent: false,
     },
@@ -52,12 +50,12 @@ function BridgeGenerate({ item, index }) {
             THREE.MathUtils.degToRad(rotation.z),
           ]}
           mass={0}
-          scale={1}
+          scale={scale}
           colliders="hull"
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
-              console.log("Bridge_" + (index + 1));
+              console.log("Bomb_" + (index + 1));
             }
           }}
         >
@@ -68,11 +66,11 @@ function BridgeGenerate({ item, index }) {
   );
 }
 
-export default function Bridge() {
+export default function Bomb() {
   return (
     <>
-      {bridgeData.map((item, index) => (
-        <BridgeGenerate item={item} key={index} index={index} />
+      {bombData.map((item, index) => (
+        <BombGenerate item={item} key={index} index={index} />
       ))}
     </>
   );

@@ -15,6 +15,15 @@ import House from "./models/keyKit/House.jsx";
 import Tree from "./models/keyKit/Tree.jsx";
 import FarmPlot from "./models/keyKit/FarmPlot.jsx";
 import Flower from "./models/kennyKit/Flower.jsx";
+import Plant from "./models/kennyKit/Plant.jsx";
+import Mountain from "./models/keyKit/Mountain.jsx";
+import Patch from "./models/kennyKit/Patch.jsx";
+import Platform from "./models/kennyKit/Platform.jsx";
+import Ship from "./models/kennyKit/Ship.jsx";
+import Mushroom from "./models/kennyKit/Mushroom.jsx";
+import Chest from "./models/kennyKit/Chest.jsx";
+import Bomb from "./models/kennyKit/Bomb.jsx";
+import Box from "./models/kennyKit/Box.jsx";
 export default function World() {
   return (
     <>
@@ -34,6 +43,15 @@ export default function World() {
           <Tree/>
           <FarmPlot/>
           <Flower/>
+          <Plant/>
+          <Mountain/>
+          <Patch/>
+          <Platform/>
+          <Ship/>
+          <Mushroom/>
+          <Chest/>
+          <Bomb/>
+          <Box/>
         </group>
       </RigidBody>
     </>
