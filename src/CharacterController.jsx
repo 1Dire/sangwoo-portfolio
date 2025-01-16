@@ -39,7 +39,7 @@ export const CharacterController = () => {
     touch_event,
     reset_Y
   } = useControls("Character Control", {
-    touch_event: true,
+    touch_event: false,
     position: {
       value: {
         x: 0,

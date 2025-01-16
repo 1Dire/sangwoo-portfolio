@@ -9,6 +9,12 @@ import Rock from "./models/keyKit/Rock.jsx";
 import Forest from "./models/keyKit/Forest.jsx";
 import Bridge from "./models/keyKit/Bridge.jsx";
 import Watermill from "./models/keyKit/Watermill.jsx";
+import Mine from "./models/keyKit/Mine.jsx";
+import Lumbermill from "./models/keyKit/Lumbermill.jsx";
+import House from "./models/keyKit/House.jsx";
+import Tree from "./models/keyKit/Tree.jsx";
+import FarmPlot from "./models/keyKit/FarmPlot.jsx";
+import Flower from "./models/kennyKit/Flower.jsx";
 export default function World() {
   return (
     <>
@@ -22,6 +28,12 @@ export default function World() {
           <Forest />
           <Bridge />
           <Watermill />
+          <Mine/>
+          <Lumbermill/>
+          <House/>
+          <Tree/>
+          <FarmPlot/>
+          <Flower/>
         </group>
       </RigidBody>
     </>
