@@ -26,26 +26,49 @@ function App() {
   const [start, setStart] = useState(false);
   const [audio1] = useState(new Audio("/audio/nocturnal knoll.mp3"));
   const [audio2] = useState(new Audio("/audio/sassy shells.mp3"));
-  const [currentAudio, setCurrentAudio] = useState(audio1); 
-  const [volume, setVolume] = useState(0);
+  const [currentAudio, setCurrentAudio] = useState(audio1); // 기본 오디오는 첫 번째 노래
+  const [volume, setVolume] = useState(0); // 볼륨 상태
+
+  // 창이 내려가면 오디오를 멈추고, 다시 포커스를 받으면 오디오를 재생
+  useEffect(() => {
+    const handleBlur = () => {
+      if (currentAudio) {
+        currentAudio.pause(); // 창이 내려가면 오디오 멈춤
+      }
+    };
+
+    const handleFocus = () => {
+      if (start && currentAudio) {
+        currentAudio.play(); // 창에 포커스가 돌아오면 오디오 재생
+      }
+    };
+
+    window.addEventListener("blur", handleBlur);
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.removeEventListener("blur", handleBlur);
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, [currentAudio, start]);
 
   useEffect(() => {
     if (start) {
-      currentAudio.play(); 
-      currentAudio.volume = volume; 
+      currentAudio.play(); // 게임이 시작되면 현재 오디오 재생
+      currentAudio.volume = volume; // 초기 볼륨 설정
 
-     
+      // 오디오 볼륨 점차적으로 증가
       const volumeInterval = setInterval(() => {
         if (volume < 1) {
           setVolume((prevVolume) => {
-            const newVolume = prevVolume + 0.05; 
+            const newVolume = prevVolume + 0.05; // 0.05씩 증가
             currentAudio.volume = newVolume > 1 ? 1 : newVolume;
             return newVolume > 1 ? 1 : newVolume;
           });
         }
-      }, 200); 
+      }, 200); // 200ms마다 볼륨 증가
 
-     
+      // 노래가 끝나면 다른 노래로 변경
       const handleEnd = () => {
         if (currentAudio === audio1) {
           setCurrentAudio(audio2);
@@ -57,12 +80,12 @@ function App() {
       currentAudio.addEventListener("ended", handleEnd);
 
       return () => {
-        clearInterval(volumeInterval); 
+        clearInterval(volumeInterval); // 볼륨 증가 인터벌 클린업
         currentAudio.removeEventListener("ended", handleEnd);
       };
     } else {
-      currentAudio.pause(); 
-      setVolume(0);
+      currentAudio.pause(); // 게임이 시작되지 않으면 오디오 멈추기
+      setVolume(0); // 볼륨 리셋
     }
   }, [start, currentAudio, audio1, audio2, volume]);
 
