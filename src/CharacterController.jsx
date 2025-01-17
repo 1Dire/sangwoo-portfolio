@@ -39,11 +39,11 @@ export const CharacterController = () => {
     touch_event,
     reset_Y
   } = useControls("Character Control", {
-    touch_event:true,
+    touch_event: true,
     position: {
       value: {
         x: 0,
-        y: 5,
+        y: 3,
         z: 0,
       },
       step: 0.1,
@@ -65,7 +65,8 @@ export const CharacterController = () => {
       max: degToRad(5),
       step: degToRad(0.1),
     },
-  },{collapsed:true});
+  }, { collapsed: true });
+
   const rb = useRef();
   const container = useRef();
   const character = useRef();
@@ -82,6 +83,8 @@ export const CharacterController = () => {
   const [, get] = useKeyboardControls();
 
   const isClicking = useRef(false);
+  
+  // Touch and mouse interaction
   useEffect(() => {
     const onMouseDown = (e) => {
       if (touch_event) isClicking.current = true;
@@ -144,26 +147,27 @@ export const CharacterController = () => {
           Math.cos(rotationTarget.current + characterRotationTarget.current) *
           speed;
         if (speed === run_speed && !isJumping) {
-          setAnimation("run");
+          if (animation !== "run") setAnimation("run"); // 애니메이션이 이미 "run"이 아니면만 업데이트
         } else if (!isJumping) {
-          setAnimation("walk");
+          if (animation !== "walk") setAnimation("walk"); // 애니메이션이 이미 "walk"이 아니면만 업데이트
         }
       } else if (!isJumping) {
-        setAnimation("idle");
+        if (animation !== "idle") setAnimation("idle"); // 애니메이션이 이미 "idle"이 아니면만 업데이트
       }
 
       if (rb.current.translation().y <= 0.15) {
         setIsJumping(false);
         if (movement.x === 0 && movement.z === 0) {
-          setAnimation("idle");
+          if (animation !== "idle") setAnimation("idle"); // 애니메이션이 이미 "idle"이 아니면만 업데이트
         }
       }
+
       if (rb.current) {
         const position = rb.current.translation(); // 현재 좌표 가져오기
-          if(position.y <reset_Y){
-            rb.current.setTranslation({ x: 0, y: 5, z: 0 }, true); // 위치 초기화
-            rb.current.setLinvel({ x: 0, y: 0, z: 0 }, true); // 속도 초기화
-          }
+        if (position.y < reset_Y) {
+          rb.current.setTranslation({ x: 0, y: 5, z: 0 }, true); // 위치 초기화
+          rb.current.setLinvel({ x: 0, y: 0, z: 0 }, true); // 속도 초기화
+        }
       }
 
       character.current.rotation.y = lerpAngle(

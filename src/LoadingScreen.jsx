@@ -6,18 +6,14 @@ export const LoadingScreen = ({ started, onStarted }) => {
   const [delayedProgress, setDelayedProgress] = useState(0);
 
   useEffect(() => {
-    let timer;
-
-    if (progress === 100) {
-      timer = setTimeout(() => {
-        setDelayedProgress(100);
-      }, 1500); // 1.5초 지연 후 100으로 설정
-    } else {
-      setDelayedProgress(progress); // 즉시 업데이트
+    // progress가 100일 때만 delayedProgress를 100으로 설정
+    if (progress === 100 && delayedProgress !== 100) {
+      setDelayedProgress(100);
+    } else if (progress < 100 && delayedProgress !== progress) {
+      // progress가 100 미만일 때는 progress 값에 맞게 업데이트
+      setDelayedProgress(progress);
     }
-
-    return () => clearTimeout(timer); // 타이머 클리어
-  }, [progress]);
+  }, [progress, delayedProgress]); // 의존성 배열에 delayedProgress 추가
 
   return (
     <div className={`loadingScreen ${started ? "loadingScreen--started" : ""}`}>
