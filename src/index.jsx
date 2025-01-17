@@ -2,11 +2,10 @@ import "./style.css";
 import ReactDOM from "react-dom/client";
 import { Canvas, useThree } from "@react-three/fiber";
 import Experience from "./Experience.jsx";
-import { StrictMode, useEffect } from "react";
+import { Suspense, useEffect, useState, StrictMode } from "react";
 import * as THREE from "three";
 import { KeyboardControls } from "@react-three/drei";
 import LoadingScreen from "./LoadingScreen.jsx";
-import CloudySky from "./CloudySky.jsx";
 
 function AxesHelperComponent() {
   const { scene } = useThree(); // useThree 훅을 사용하여 scene에 접근
@@ -21,32 +20,43 @@ function AxesHelperComponent() {
 
   return null;
 }
+function App() {
+  const [start, setStart] = useState(false);
+  useEffect(() => {
+    if (start) {
+      // audio.play();
+    }
+  }, [start]);
+  return (
+    <>
+      <StrictMode>
+        <KeyboardControls
+          map={[
+            { name: "forward", keys: ["ArrowUp", "KeyW"] },
+            { name: "backward", keys: ["ArrowDown", "KeyS"] },
+            { name: "left", keys: ["ArrowLeft", "KeyA"] },
+            { name: "right", keys: ["ArrowRight", "KeyD"] },
+            { name: "run", keys: ["Shift"] },
+            // { name: "jump", keys: ["Space"] },
+          ]}
+        >
+          <Canvas
+            shadows
+            camera={{ position: [0, 5, 0], near: 0.1, fov: 40 }}
+            style={{
+              touchAction: "none",
+              background:
+                "linear-gradient(to bottom,rgb(91, 187, 247), #ffffff)", // 하늘색 그라데이션
+            }}
+          >
 
+            <Suspense fallback={null}>{start && <Experience />}</Suspense>
+          </Canvas>
+          <LoadingScreen started={start} onStarted={() => setStart(true)} />
+        </KeyboardControls>
+      </StrictMode>
+    </>
+  );
+}
 const root = ReactDOM.createRoot(document.querySelector("#root"));
-root.render(
-  <StrictMode>
-    <KeyboardControls
-      map={[
-        { name: "forward", keys: ["ArrowUp", "KeyW"] },
-        { name: "backward", keys: ["ArrowDown", "KeyS"] },
-        { name: "left", keys: ["ArrowLeft", "KeyA"] },
-        { name: "right", keys: ["ArrowRight", "KeyD"] },
-        { name: "run", keys: ["Shift"] },
-        // { name: "jump", keys: ["Space"] },
-      ]}
-    >
-      <Canvas
-        shadows
-        camera={{ position: [3, 3, 3], near: 0.1, fov: 40 }}
-        style={{
-          touchAction: "none",
-          background: "linear-gradient(to bottom,rgb(91, 187, 247), #ffffff)", // 하늘색 그라데이션
-        }}
-      >
-        <AxesHelperComponent />
-        <Experience />
-      </Canvas>
-      <LoadingScreen/>
-    </KeyboardControls>
-  </StrictMode>
-);
+root.render(<App />);
