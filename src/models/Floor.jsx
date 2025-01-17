@@ -7,7 +7,7 @@ useGLTF.preload("./models/keyKit/hex/hex_forest_detail.glb");
 useGLTF.preload("./models/keyKit/hex/hex_water.glb");
 useGLTF.preload("./models/keyKit/hex/hex_water_detail.glb");
 useGLTF.preload("./models/keyKit/hex/hex_forest_waterB_detail.glb");
-useGLTF.preload("./models/keyKit/hex/hex_forest_roadA.glb");
+useGLTF.preload("./models/keyKit/hex/hex_forest_roadA_detail.glb");
 useGLTF.preload("./models/keyKit/hex/hex_forest_roadB.glb");
 useGLTF.preload("./models/keyKit/hex/hex_rock.glb");
 useGLTF.preload("./models/keyKit/hex/hex_forest_transitionA.glb");
@@ -85,15 +85,15 @@ function HexForestDetail({ item, index }) {
     </>
   );
 }
-function HexForestRoadA({ item, index }) {
-  const model = useGLTF("./models/keyKit/hex/hex_forest_roadA.glb");
+function HexForestRoadADetail({ item, index }) {
+  const model = useGLTF("./models/keyKit/hex/hex_forest_roadA_detail.glb");
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
   const { position, rotation, show, clickEvent } = useControls(
-    "Hex_Forest_RoadA_" + (index + 1),
+    "Hex_Forest_RoadA_detail_" + (index + 1),
     {
       position: {
         value: {
@@ -141,7 +141,7 @@ function HexForestRoadA({ item, index }) {
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
-              console.log("Hex_forest_Road_A" + (index + 1));
+              console.log("Hex_forest_Road_A_detail" + (index + 1));
             }
           }}
         >
@@ -883,8 +883,8 @@ export default function Floor() {
   const hex_Forest_Details = floorData.filter(
     (item) => item.type === "hex_forest_detail"
   );
-  const hex_forest_road_A = floorData.filter(
-    (item) => item.type === "hex_forest_roadA"
+  const hex_forest_roadA_detail = floorData.filter(
+    (item) => item.type === "hex_forest_roadA_detail"
   );
   const hex_forest_road_B = floorData.filter(
     (item) => item.type === "hex_forest_roadB"
@@ -927,8 +927,8 @@ export default function Floor() {
       {hex_Forest_Details.map((item, index) => (
         <HexForestDetail item={item} key={index} index={index} />
       ))}
-      {hex_forest_road_A.map((item, index) => (
-        <HexForestRoadA item={item} key={index} index={index} />
+      {hex_forest_roadA_detail.map((item, index) => (
+        <HexForestRoadADetail item={item} key={index} index={index} />
       ))}
       {hex_forest_road_B.map((item, index) => (
         <HexForestRoadB item={item} key={index} index={index} />

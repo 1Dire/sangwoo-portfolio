@@ -31,7 +31,7 @@ export default function Lights() {
   const { ambientIntensity } = useControls(
     "Ambient Light",
     {
-      ambientIntensity: { value: 0.2, min: 0, max: 10, step: 0.1 },
+      ambientIntensity: { value: 1.6, min: 0, max: 10, step: 0.1 },
     },
     { collapsed: true }
   );

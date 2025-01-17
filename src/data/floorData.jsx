@@ -30,8 +30,8 @@ export const floorData = [
   },
 
   // hex_forest_roadA
-  { position: [1, 0, 1.7], rotation: [0, 120, 0], type: "hex_forest_roadA" },
-  { position: [-2, 0, 0], rotation: [0, 0, 0], type: "hex_forest_roadA" },
+  { position: [1, 0, 1.7], rotation: [0, 120, 0], type: "hex_forest_roadA_detail" },
+  { position: [-2, 0, 0], rotation: [0, 0, 0], type: "hex_forest_roadA_detail" },
   //hex_forest_roadB
 
   { position: [6, 0, 3.4], rotation: [0, 0, 0], type: "hex_forest_roadB" },

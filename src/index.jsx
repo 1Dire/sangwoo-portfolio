@@ -5,7 +5,7 @@ import Experience from "./Experience.jsx";
 import { StrictMode, useEffect } from "react";
 import * as THREE from "three";
 import { KeyboardControls } from "@react-three/drei";
-import LodingScreen from "./LodingScreen.jsx";
+import LoadingScreen from "./LoadingScreen.jsx";
 import CloudySky from "./CloudySky.jsx";
 
 function AxesHelperComponent() {
@@ -40,13 +40,13 @@ root.render(
         camera={{ position: [3, 3, 3], near: 0.1, fov: 40 }}
         style={{
           touchAction: "none",
+          background: "linear-gradient(to bottom,rgb(91, 187, 247), #ffffff)", // 하늘색 그라데이션
         }}
       >
-        <CloudySky/>
         <AxesHelperComponent />
         <Experience />
       </Canvas>
-      <LodingScreen/>
+      <LoadingScreen/>
     </KeyboardControls>
   </StrictMode>
 );
