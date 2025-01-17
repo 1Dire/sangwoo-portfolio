@@ -11,7 +11,7 @@ useGLTF.preload("./models/keyKit/object/watermill.glb");
 function WatermillGenerate({ item, index }) {
   const model = useGLTF("./models/keyKit/object/watermill.glb");
   const wheelRef = useRef();
-
+  
   // Shadow 설정
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
@@ -39,15 +39,15 @@ function WatermillGenerate({ item, index }) {
       },
       show: true,
       clickEvent: false,
-      rotationSpeed: { value: 1, min: 0, max: 10, step: 0.1 }, // Leva 컨트롤로 회전 속도 설정
+      rotationSpeed: { value: 1, min: 0, max: 10, step: 0.1 }, // 회전 속도 설정
     },
     { collapsed: true }
   );
 
-  // useFrame을 사용하여 물레방아 휠 회전
+  // 물레방아 휠 회전 처리 (회전 속도를 반영)
   useFrame((state, delta) => {
     if (wheelRef.current) {
-      wheelRef.current.rotation.x +=  delta; 
+      wheelRef.current.rotation.x += rotationSpeed * delta; // rotationSpeed에 delta를 곱하여 회전 속도 적용
     }
   });
 

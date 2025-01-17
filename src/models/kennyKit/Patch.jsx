@@ -2,17 +2,23 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { patchData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
+import { useControls } from "leva";
+
+// GLTF 모델 미리 로드
 useGLTF.preload("./models/kennyKit/object/pirate/grass-patch.glb");
+
 function PatchGenerate({ item, index }) {
-  const model = useGLTF("./models/kennyKit/object/pirate/grass-patch.glb");
-  model.scene.children.forEach((mesh) => {
+  // 이미 미리 로드된 모델을 사용
+  const { scene } = useGLTF("./models/kennyKit/object/pirate/grass-patch.glb");
+
+  // 그림자 설정
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
   const { position, rotation, show, clickEvent, scale } = useControls(
-    "Patch_" + (index + 1),
+    `Patch_${index + 1}`,
     {
       position: {
         value: {
@@ -42,7 +48,6 @@ function PatchGenerate({ item, index }) {
       {show && (
         <RigidBody
           type="fixed"
-          key={index}
           position={[position.x, position.y, position.z]}
           rotation={[
             THREE.MathUtils.degToRad(rotation.x),
@@ -55,11 +60,11 @@ function PatchGenerate({ item, index }) {
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
-              console.log("Patch_" + (index + 1));
+              console.log(`Patch_${index + 1}`);
             }
           }}
         >
-          <primitive object={model.scene.clone()} />
+          <primitive object={scene.clone()} />
         </RigidBody>
       )}
     </>

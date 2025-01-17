@@ -1,18 +1,25 @@
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import { bombData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
+import { bombData, rockData } from "../../data/objectData.jsx";
+import { useControls } from "leva";
+
+// GLTF 모델 미리 로드
+useGLTF.preload("./models/keyKit/object/detail_rocks_small.glb");
 useGLTF.preload("./models/kennyKit/object/platformer/bomb.glb");
-function BombGenerate({ item, index }) {
-  const model = useGLTF("./models/kennyKit/object/platformer/bomb.glb");
-  model.scene.children.forEach((mesh) => {
+
+function ObjectGenerate({ item, index, modelPath, modelKey }) {
+  // GLTF 모델 로드
+  const { scene } = useGLTF(modelPath);
+
+  // 그림자 설정
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
-  const { position, rotation, show, clickEvent, scale } = useControls(
-    "Bomb_" + (index + 1),
+  const { position, rotation, scale, show, clickEvent } = useControls(
+    `${modelKey}_${index + 1}`,
     {
       position: {
         value: {
@@ -30,7 +37,7 @@ function BombGenerate({ item, index }) {
         },
         step: 0.1,
       },
-      scale: item.scale,
+      scale: item.scale || 1,  // 기본값 설정
       show: true,
       clickEvent: false,
     },
@@ -55,23 +62,42 @@ function BombGenerate({ item, index }) {
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
-              console.log("Bomb_" + (index + 1));
+              console.log(`${modelKey}_${index + 1}`);
             }
           }}
         >
-          <primitive object={model.scene.clone()} />
+           <primitive object={scene.clone()} />
         </RigidBody>
       )}
     </>
   );
 }
 
-export default function Bomb() {
+export default function ObjectRenderer() {
+  const bombModels = bombData.map((item, index) => (
+    <ObjectGenerate
+      key={index}
+      item={item}
+      index={index}
+      modelPath="./models/kennyKit/object/platformer/bomb.glb"
+      modelKey="Bomb"
+    />
+  ));
+
+  const rockModels = rockData.filter((item) => item.type === "detail_rocks_small").map((item, index) => (
+    <ObjectGenerate
+      key={index}
+      item={item}
+      index={index}
+      modelPath="./models/keyKit/object/detail_rocks_small.glb"
+      modelKey="DetailRockSmall"
+    />
+  ));
+
   return (
     <>
-      {bombData.map((item, index) => (
-        <BombGenerate item={item} key={index} index={index} />
-      ))}
+      {bombModels}
+      {rockModels}
     </>
   );
 }

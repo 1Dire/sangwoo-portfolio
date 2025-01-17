@@ -2,16 +2,22 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { mushroomData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
-useGLTF.preload("./models/kennyKit/object/pirate/mushrooms.glb");
-function MushroomhGenerate({ item, index }) {
-  const model = useGLTF("./models/kennyKit/object/platformer/mushrooms.glb");
-  model.scene.children.forEach((mesh) => {
+import { useControls } from "leva";
+
+// GLTF 모델을 미리 로드
+useGLTF.preload("./models/kennyKit/object/platformer/mushrooms.glb");
+
+function MushroomGenerate({ item, index }) {
+  const { scene } = useGLTF("./models/kennyKit/object/platformer/mushrooms.glb");
+
+  // 그림자 설정
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
-  const { position, rotation, show, clickEvent, scale } = useControls(
+  // useControls로 위치, 회전, 크기 등을 설정
+  const { position, rotation, scale, show, clickEvent } = useControls(
     "Mushroom_" + (index + 1),
     {
       position: {
@@ -59,7 +65,8 @@ function MushroomhGenerate({ item, index }) {
             }
           }}
         >
-          <primitive object={model.scene.clone()} />
+          {/* 모델을 복제하여 렌더링 */}
+          <primitive object={scene.clone()} />
         </RigidBody>
       )}
     </>
@@ -70,7 +77,7 @@ export default function Chest() {
   return (
     <>
       {mushroomData.map((item, index) => (
-        <MushroomhGenerate item={item} key={index} index={index} />
+        <MushroomGenerate item={item} key={index} index={index} />
       ))}
     </>
   );

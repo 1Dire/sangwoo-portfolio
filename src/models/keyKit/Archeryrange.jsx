@@ -2,16 +2,19 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { archeryrangeData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
+import { useControls } from "leva";
 useGLTF.preload("./models/keyKit/object/archeryrange.glb");
+
 function ArcheryrangeGenerate({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/archeryrange.glb");
-  model.scene.children.forEach((mesh) => {
+  const { scene } = useGLTF("./models/keyKit/object/archeryrange.glb");
+  // 모델에 대한 그림자 설정
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
-  const { position, rotation, show,clickEvent } = useControls(
+  // useControls의 값들을 설정
+  const { position, rotation, show, clickEvent } = useControls(
     "Archeryrange_" + (index + 1),
     {
       position: {
@@ -31,7 +34,7 @@ function ArcheryrangeGenerate({ item, index }) {
         step: 0.1,
       },
       show: true,
-      clickEvent:false,
+      clickEvent: false,
     },
     { collapsed: true }
   );
@@ -58,7 +61,7 @@ function ArcheryrangeGenerate({ item, index }) {
             }
           }}
         >
-          <primitive object={model.scene.clone()} />
+           <primitive object={scene.clone()} />
         </RigidBody>
       )}
     </>

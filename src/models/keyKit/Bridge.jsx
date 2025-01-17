@@ -2,20 +2,24 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { bridgeData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
+import { useControls } from "leva";
 useGLTF.preload("./models/keyKit/object/bridge.glb");
 
 function BridgeGenerate({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/bridge.glb");
-  model.scene.children.forEach((mesh) => {
+  // GLTF 모델 로드
+  const { scene } = useGLTF("./models/keyKit/object/bridge.glb");
+
+  // 모델 그림자 설정 및 폴리곤 오프셋 추가
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.material.polygonOffset = true;
     mesh.material.polygonOffsetFactor = 1; 
-    mesh.material.polygonOffsetUnits = 1; 
+    mesh.material.polygonOffsetUnits = 1;
   });
 
+  // useControls 값 설정
   const { position, rotation, show, clickEvent } = useControls(
-    "Bridge_" + (index + 1),
+    `Bridge_${index + 1}`,
     {
       position: {
         value: {
@@ -61,7 +65,7 @@ function BridgeGenerate({ item, index }) {
             }
           }}
         >
-          <primitive object={model.scene.clone()} />
+            <primitive object={scene.clone()} />
         </RigidBody>
       )}
     </>

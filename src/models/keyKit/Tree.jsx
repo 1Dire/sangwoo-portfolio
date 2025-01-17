@@ -2,204 +2,65 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { treeData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
+
+// GLTF 모델 미리 로드
 useGLTF.preload("./models/keyKit/object/detail_treeA.glb");
 useGLTF.preload("./models/keyKit/object/detail_treeB.glb");
 useGLTF.preload("./models/keyKit/object/detail_treeC.glb");
-function TreeTypeA({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/detail_treeA.glb");
+
+// 공통 Tree 컴포넌트
+function TreeType({ model, item, index, type }) {
+  if (!model) return null; // 모델이 로드되지 않았을 때 처리
+
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
-  const { position, rotation, show, clickEvent } = useControls(
-    "Tree_TypeA_" + (index + 1),
-    {
-      position: {
-        value: {
-          x: item.position[0],
-          y: item.position[1],
-          z: item.position[2],
-        },
-        step: 0.1,
-      },
-      rotation: {
-        value: {
-          x: item.rotation[0],
-          y: item.rotation[1],
-          z: item.rotation[2],
-        },
-        step: 0.1,
-      },
-      show: true,
-      clickEvent: false,
-    },
-    { collapsed: true }
-  );
-
   return (
     <>
-      {show && (
-        <RigidBody
-          type="fixed"
-          key={index}
-          position={[position.x, position.y, position.z]}
-          rotation={[
-            THREE.MathUtils.degToRad(rotation.x),
-            THREE.MathUtils.degToRad(rotation.y),
-            THREE.MathUtils.degToRad(rotation.z),
-          ]}
-          mass={0}
-          scale={1}
-          colliders="hull"
-          onClick={(event) => {
-            event.stopPropagation();
-            if (clickEvent) {
-              console.log("Tree_TypeA_" + (index + 1));
-            }
-          }}
-        >
-          <primitive object={model.scene.clone()} />
-        </RigidBody>
-      )}
+      <RigidBody
+        type="fixed"
+        key={index}
+        position={[item.position[0], item.position[1], item.position[2]]}
+        rotation={[
+          THREE.MathUtils.degToRad(item.rotation[0]),
+          THREE.MathUtils.degToRad(item.rotation[1]),
+          THREE.MathUtils.degToRad(item.rotation[2]),
+        ]}
+        mass={0}
+        scale={1}
+        colliders="hull"
+      >
+        <primitive object={model.scene.clone()} />
+      </RigidBody>
     </>
   );
 }
-function TreeTypeB({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/detail_treeB.glb");
-  model.scene.children.forEach((mesh) => {
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
 
-  const { position, rotation, show, clickEvent } = useControls(
-    "Tree_TypeB_" + (index + 1),
-    {
-      position: {
-        value: {
-          x: item.position[0],
-          y: item.position[1],
-          z: item.position[2],
-        },
-        step: 0.1,
-      },
-      rotation: {
-        value: {
-          x: item.rotation[0],
-          y: item.rotation[1],
-          z: item.rotation[2],
-        },
-        step: 0.1,
-      },
-      show: true,
-      clickEvent: false,
-    },
-    { collapsed: true }
-  );
-
-  return (
-    <>
-      {show && (
-        <RigidBody
-          type="fixed"
-          key={index}
-          position={[position.x, position.y, position.z]}
-          rotation={[
-            THREE.MathUtils.degToRad(rotation.x),
-            THREE.MathUtils.degToRad(rotation.y),
-            THREE.MathUtils.degToRad(rotation.z),
-          ]}
-          mass={0}
-          scale={1}
-          colliders="hull"
-          onClick={(event) => {
-            event.stopPropagation();
-            if (clickEvent) {
-              console.log("Tree_TypeB_" + (index + 1));
-            }
-          }}
-        >
-          <primitive object={model.scene.clone()} />
-        </RigidBody>
-      )}
-    </>
-  );
-}
-function TreeTypeC({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/detail_treeC.glb");
-  model.scene.children.forEach((mesh) => {
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
-
-  const { position, rotation, show, clickEvent } = useControls(
-    "Tree_TypeC_" + (index + 1),
-    {
-      position: {
-        value: {
-          x: item.position[0],
-          y: item.position[1],
-          z: item.position[2],
-        },
-        step: 0.1,
-      },
-      rotation: {
-        value: {
-          x: item.rotation[0],
-          y: item.rotation[1],
-          z: item.rotation[2],
-        },
-        step: 0.1,
-      },
-      show: true,
-      clickEvent: false,
-    },
-    { collapsed: true }
-  );
-
-  return (
-    <>
-      {show && (
-        <RigidBody
-          type="fixed"
-          key={index}
-          position={[position.x, position.y, position.z]}
-          rotation={[
-            THREE.MathUtils.degToRad(rotation.x),
-            THREE.MathUtils.degToRad(rotation.y),
-            THREE.MathUtils.degToRad(rotation.z),
-          ]}
-          mass={0}
-          scale={1}
-          colliders="hull"
-          onClick={(event) => {
-            event.stopPropagation();
-            if (clickEvent) {
-              console.log("Tree_TypeC_" + (index + 1));
-            }
-          }}
-        >
-          <primitive object={model.scene.clone()} />
-        </RigidBody>
-      )}
-    </>
-  );
-}
+// Tree 컴포넌트
 export default function Tree() {
+  // 나무 데이터를 타입별로 필터링
   const typeATree = treeData.filter((item) => item.type === "A");
   const typeBTree = treeData.filter((item) => item.type === "B");
   const typeCTree = treeData.filter((item) => item.type === "C");
+
+  // 모델 로드 (useGLTF 훅을 사용하여 모델이 로드될 때까지 기다림)
+  const modelA = useGLTF("./models/keyKit/object/detail_treeA.glb", true);
+  const modelB = useGLTF("./models/keyKit/object/detail_treeB.glb", true);
+  const modelC = useGLTF("./models/keyKit/object/detail_treeC.glb", true);
+
+  // 각 타입에 맞게 트리 모델 렌더링
   return (
     <>
       {typeATree.map((item, index) => (
-        <TreeTypeA item={item} key={index} index={index} />
+        <TreeType key={index} model={modelA} item={item} index={index} type="A" />
       ))}
       {typeBTree.map((item, index) => (
-        <TreeTypeB item={item} key={index} index={index} />
+        <TreeType key={index} model={modelB} item={item} index={index} type="B" />
       ))}
       {typeCTree.map((item, index) => (
-        <TreeTypeC item={item} key={index} index={index} />
+        <TreeType key={index} model={modelC} item={item} index={index} type="C" />
       ))}
     </>
   );

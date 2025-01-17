@@ -6,6 +6,7 @@ import { shipData } from "../../data/objectData.jsx";
 import { useControls } from "leva";
 import { useFrame } from "@react-three/fiber";
 
+// GLTF 모델 미리 로드
 useGLTF.preload("./models/kennyKit/object/pirate/ship-small.glb");
 
 const normalizeAngle = (angle) => {
@@ -39,22 +40,14 @@ function ShipGenerate({ item, index }) {
   });
 
   const { position, rotation, show, clickEvent, scale } = useControls(
-    "Ship" + (index + 1),
+    `Ship_${index + 1}`,
     {
       position: {
-        value: {
-          x: item.position[0],
-          y: item.position[1],
-          z: item.position[2],
-        },
+        value: { x: item.position[0], y: item.position[1], z: item.position[2] },
         step: 0.1,
       },
       rotation: {
-        value: {
-          x: item.rotation[0],
-          y: item.rotation[1],
-          z: item.rotation[2],
-        },
+        value: { x: item.rotation[0], y: item.rotation[1], z: item.rotation[2] },
         step: 0.1,
       },
       scale: item.scale,
@@ -72,15 +65,10 @@ function ShipGenerate({ item, index }) {
       const range = 0.5; // 배가 이동할 거리 범위
 
       const z = item.position[2] + Math.sin(time) * range;
-
       const direction = Math.cos(time);
       const targetAngle = direction > 0 ? 0 : Math.PI;
 
-      rotationTarget.current = lerpAngle(
-        rotationTarget.current,
-        targetAngle,
-        0.05
-      );
+      rotationTarget.current = lerpAngle(rotationTarget.current, targetAngle, 0.05);
 
       modelRef.current.setNextKinematicTranslation(
         new THREE.Vector3(position.x, position.y, z)
@@ -99,7 +87,6 @@ function ShipGenerate({ item, index }) {
         <RigidBody
           ref={modelRef}
           type="kinematicPosition"
-          key={index}
           position={[position.x, position.y, position.z]}
           rotation={[
             THREE.MathUtils.degToRad(rotation.x),
@@ -112,7 +99,7 @@ function ShipGenerate({ item, index }) {
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
-              console.log("Ship" + (index + 1));
+              console.log(`Ship_${index + 1}`);
             }
           }}
         >

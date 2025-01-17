@@ -3,17 +3,20 @@ import { useState, useEffect } from "react";
 
 export const LoadingScreen = ({ started, onStarted }) => {
   const { progress } = useProgress();
-  const [delayedProgress, setDelayedProgress] = useState(progress);
-  
+  const [delayedProgress, setDelayedProgress] = useState(0);
+
   useEffect(() => {
+    let timer;
+
     if (progress === 100) {
-      const timer = setTimeout(() => {
-        setDelayedProgress(progress);
-      }, 1500); 
-      return () => clearTimeout(timer);
+      timer = setTimeout(() => {
+        setDelayedProgress(100);
+      }, 1500); // 1.5초 지연 후 100으로 설정
     } else {
-      setDelayedProgress(progress);
+      setDelayedProgress(progress); // 즉시 업데이트
     }
+
+    return () => clearTimeout(timer); // 타이머 클리어
   }, [progress]);
 
   return (

@@ -49,8 +49,7 @@ function App() {
                 "linear-gradient(to bottom,rgb(91, 187, 247), #ffffff)", // 하늘색 그라데이션
             }}
           >
-
-            <Suspense fallback={null}>{start && <Experience />}</Suspense>
+       <Suspense fallback={null}>{start && <Experience />}</Suspense>
           </Canvas>
           <LoadingScreen started={start} onStarted={() => setStart(true)} />
         </KeyboardControls>

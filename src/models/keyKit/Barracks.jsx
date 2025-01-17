@@ -2,17 +2,22 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { barracksData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
+import { useControls } from "leva";
 useGLTF.preload("./models/keyKit/object/barracks.glb");
+
 function BarracksGenerate({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/barracks.glb");
-  model.scene.children.forEach((mesh) => {
+  
+  const { scene } = useGLTF("./models/keyKit/object/barracks.glb");
+
+
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
+
   const { position, rotation, show, clickEvent } = useControls(
-    "Barracks_" + (index + 1),
+    `Barracks_${index + 1}`,
     {
       position: {
         value: {
@@ -58,7 +63,7 @@ function BarracksGenerate({ item, index }) {
             }
           }}
         >
-          <primitive object={model.scene.clone()} />
+            <primitive object={scene.clone()} />
         </RigidBody>
       )}
     </>

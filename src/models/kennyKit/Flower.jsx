@@ -2,19 +2,27 @@ import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
 import { flowertData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
+import { useControls } from "leva";
+
+// GLTF 모델 로딩 최적화
 useGLTF.preload("./models/kennyKit/object/platformer/flowers.glb");
 useGLTF.preload("./models/kennyKit/object/platformer/flowers-tall.glb");
 
-function FlowerTypeA({ item, index }) {
-  const model = useGLTF("./models/kennyKit/object/platformer/flowers.glb");
-  model.scene.children.forEach((mesh) => {
+function FlowerType({ item, index, modelPath, modelKey }) {
+  // 모델 로드
+  const { scene } = useGLTF(modelPath);
+
+  // 그림자 설정
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
-  const { position, rotation, show, clickEvent ,scale } = useControls(
-    "Flower_TypeA_" + (index + 1),
+  // 모델을 clone()하여 복제
+  const clonedScene = scene.clone();
+
+  const { position, rotation, show, clickEvent, scale } = useControls(
+    `${modelKey}_${index + 1}`,
     {
       position: {
         value: {
@@ -32,69 +40,8 @@ function FlowerTypeA({ item, index }) {
         },
         step: 0.1,
       },
+      scale: item.scale,
       show: true,
-      clickEvent: false,
-      scale :item.scale
-    },
-    { collapsed: true }
-  );
-
-  return (
-    <>
-      {show && (
-        <RigidBody
-          type="fixed"
-          key={index}
-          position={[position.x, position.y, position.z]}
-          rotation={[
-            THREE.MathUtils.degToRad(rotation.x),
-            THREE.MathUtils.degToRad(rotation.y),
-            THREE.MathUtils.degToRad(rotation.z),
-          ]}
-          mass={0}
-          scale={scale}
-          colliders="hull"
-          onClick={(event) => {
-            event.stopPropagation();
-            if (clickEvent) {
-              console.log("Flower_TypeA_" + (index + 1));
-            }
-          }}
-        >
-          <primitive object={model.scene.clone()} />
-        </RigidBody>
-      )}
-    </>
-  );
-}
-function FlowerTypeB({ item, index }) {
-  const model = useGLTF("./models/kennyKit/object/platformer/flowers-tall.glb");
-  model.scene.children.forEach((mesh) => {
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-  });
-
-  const { position, rotation, show, clickEvent ,scale} = useControls(
-    "Flower_TypeB_" + (index + 1),
-    {
-      position: {
-        value: {
-          x: item.position[0],
-          y: item.position[1],
-          z: item.position[2],
-        },
-        step: 0.1,
-      },
-      rotation: {
-        value: {
-          x: item.rotation[0],
-          y: item.rotation[1],
-          z: item.rotation[2],
-        },
-        step: 0.1,
-      },
-      show: true,
-      scale:item.scale,
       clickEvent: false,
     },
     { collapsed: true }
@@ -118,11 +65,11 @@ function FlowerTypeB({ item, index }) {
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
-              console.log("Flower_TypeB_" + (index + 1));
+              console.log(`${modelKey}_${index + 1}`);
             }
           }}
         >
-          <primitive object={model.scene.clone()} />
+          <primitive object={clonedScene} />
         </RigidBody>
       )}
     </>
@@ -131,16 +78,28 @@ function FlowerTypeB({ item, index }) {
 
 export default function Flower() {
   const typeAflower = flowertData.filter((item) => item.type === "A");
-  const typeBflower= flowertData.filter((item) => item.type === "B");
+  const typeBflower = flowertData.filter((item) => item.type === "B");
+
   return (
     <>
       {typeAflower.map((item, index) => (
-        <FlowerTypeA item={item} key={index} index={index} />
+        <FlowerType
+          key={index}
+          item={item}
+          index={index}
+          modelPath="./models/kennyKit/object/platformer/flowers.glb"
+          modelKey="FlowerTypeA"
+        />
       ))}
       {typeBflower.map((item, index) => (
-        <FlowerTypeB item={item} key={index} index={index} />
+        <FlowerType
+          key={index}
+          item={item}
+          index={index}
+          modelPath="./models/kennyKit/object/platformer/flowers-tall.glb"
+          modelKey="FlowerTypeB"
+        />
       ))}
-     
     </>
   );
 }

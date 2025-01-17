@@ -1,18 +1,24 @@
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
-import { barracksData, houseData, lumbermillData } from "../../data/objectData.jsx";
-import { folder, useControls } from "leva";
+import { houseData } from "../../data/objectData.jsx";
+import { useControls } from "leva";
+
+// GLTF 모델 미리 로드
 useGLTF.preload("./models/keyKit/object/house.glb");
-function HouseGenerate({ item, index }) {
-  const model = useGLTF("./models/keyKit/object/house.glb");
-  model.scene.children.forEach((mesh) => {
+
+function ObjectGenerate({ item, index, modelPath, modelKey }) {
+  // GLTF 모델 로드
+  const { scene } = useGLTF(modelPath);
+
+  // 그림자 설정
+  scene.children.forEach((mesh) => {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
   });
 
   const { position, rotation, show, clickEvent } = useControls(
-    "House_" + (index + 1),
+    `${modelKey}_${index + 1}`,
     {
       position: {
         value: {
@@ -54,11 +60,11 @@ function HouseGenerate({ item, index }) {
           onClick={(event) => {
             event.stopPropagation();
             if (clickEvent) {
-              console.log("House_" + (index + 1));
+              console.log(`${modelKey}_${index + 1}`);
             }
           }}
         >
-          <primitive object={model.scene.clone()} />
+          <primitive object={scene.clone()} />
         </RigidBody>
       )}
     </>
@@ -69,7 +75,13 @@ export default function House() {
   return (
     <>
       {houseData.map((item, index) => (
-        <HouseGenerate item={item} key={index} index={index} />
+        <ObjectGenerate
+          key={index}
+          item={item}
+          index={index}
+          modelPath="./models/keyKit/object/house.glb"
+          modelKey="House"
+        />
       ))}
     </>
   );
