@@ -1,20 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Howl } from "howler"; // Howler import
 
 export default function Cd({ currentAudio }) {
   const [isRotating, setIsRotating] = useState(true);
   const [currentRotation, setCurrentRotation] = useState(0);
   const rotationInterval = useRef(null);
   const cdRef = useRef(null);
+  const muteBarRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  // 모바일 환경 여부 체크
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // 768px 이하를 모바일로 간주
+      setIsMobile(window.innerWidth <= 768);
     };
     window.addEventListener("resize", handleResize);
-    handleResize(); // 초기 상태 설정
+    handleResize();
 
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -40,16 +39,17 @@ export default function Cd({ currentAudio }) {
   const handleRotationToggle = () => {
     if (isRotating) {
       stopRotation();
-      currentAudio.volume(0); // 회전 중지 시 음소거
+      currentAudio.volume(0);
     } else {
       startRotation();
-      currentAudio.volume(1); // 회전 시작 시 음소거 해제
+      currentAudio.volume(1);
     }
     setIsRotating(!isRotating);
 
-    // 오디오가 재생되지 않은 경우, 재생 시작
     if (currentAudio.playing() === false) {
-      currentAudio.play().catch((err) => console.error("오디오 재생 오류:", err));
+      currentAudio
+        .play()
+        .catch((err) => console.error("오디오 재생 오류:", err));
     }
   };
 
@@ -58,12 +58,11 @@ export default function Cd({ currentAudio }) {
     return () => stopRotation();
   }, []);
 
-  // 모바일 환경을 고려하여 볼륨을 조정
   useEffect(() => {
     if (isRotating) {
-      currentAudio.volume(1); // 회전 시 볼륨 1
+      currentAudio.volume(1);
     } else {
-      currentAudio.volume(0); // 회전 중지 시 볼륨 0
+      currentAudio.volume(0);
     }
   }, [isRotating]);
 
@@ -82,13 +81,35 @@ export default function Cd({ currentAudio }) {
           justifyContent: "center",
           alignItems: "center",
           transform: `rotate(${currentRotation}deg)`,
+          opacity: isMobile ? 1 : 0.5,
+          transition: "opacity 0.3s ease",
+        }}
+        onMouseEnter={() => {
+          if (!isMobile) {
+            cdRef.current.style.opacity = 1;
+            muteBarRef.current.style.opacity = 1;
+          }
+        }}
+        onMouseLeave={() => {
+          if (!isMobile) {
+            cdRef.current.style.opacity = 0.5;
+            muteBarRef.current.style.opacity = 0.5;
+          }
         }}
       >
         <img src="./svg/cd.svg" alt="CD Icon" width="80%" height="80%" />
       </div>
 
-      {/* 모바일에서 회전 중일 때 mute-bar 숨기기 */}
-      {!isMobile || !isRotating ? <div className="mute-bar"></div> : null}
+      {!isMobile || !isRotating ? (
+        <div
+          ref={muteBarRef}
+          className="mute-bar"
+          style={{
+            opacity: isMobile ? 1 : 0.5,
+            transition: "opacity 0.3s ease",
+          }}
+        ></div>
+      ) : null}
     </div>
   );
 }
