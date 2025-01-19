@@ -84,7 +84,7 @@ function ObjectGenerate({
       setActiveButton(index); // 버튼을 밟으면 상태에 해당 버튼을 기록
     } else if (distance >= triggerDistance && isTriggered) {
       setIsTriggered(false);
-      clearActiveButton(); // 버튼을 벗어나면 상태를 초기화
+
     }
   }, [distance, isTriggered, triggerDistance, setActiveButton, clearActiveButton, index]);
 
