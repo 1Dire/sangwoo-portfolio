@@ -232,3 +232,12 @@ export const boxData = [
     scale: 0.7,
   },
 ];
+export const buttonData = [
+  {
+    position: [0, 1, -0.7],
+    rotation: [0, 0, 0],
+    scale: 0.7,
+    event: false
+  },
+
+];

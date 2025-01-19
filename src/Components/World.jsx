@@ -24,6 +24,9 @@ import Mushroom from "../models/kennyKit/Mushroom.jsx";
 import Chest from "../models/kennyKit/Chest.jsx";
 import Bomb from "../models/kennyKit/Bomb.jsx";
 import Box from "../models/kennyKit/Box.jsx";
+import TextComponent from "./TextComponent.jsx";
+import Button from "../models/kennyKit/Button.jsx";
+
 export default function World() {
   return (
     <>
@@ -52,6 +55,9 @@ export default function World() {
           <Chest/>
           <Bomb/>
           <Box/>
+          <Button/>
+       
+          <TextComponent/>
         </group>
       </RigidBody>
     </>

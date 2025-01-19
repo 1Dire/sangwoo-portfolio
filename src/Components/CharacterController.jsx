@@ -7,7 +7,7 @@ import { MathUtils, Vector3 } from "three";
 import { degToRad } from "three/src/math/MathUtils.js";
 import { Character } from "./Character";
 import * as THREE from "three";
-
+import  useStore  from '../stores/useStore';
 const normalizeAngle = (angle) => {
   while (angle > Math.PI) angle -= 2 * Math.PI;
   while (angle < -Math.PI) angle += 2 * Math.PI;
@@ -30,6 +30,8 @@ const lerpAngle = (start, end, t) => {
 };
 
 export const CharacterController = () => {
+  const { characterPosition, setCharacterPosition } = useStore();  // Using the store to get and set position
+
   const {
     position,
     rotation,
@@ -168,6 +170,7 @@ export const CharacterController = () => {
           rb.current.setTranslation({ x: 0, y: 5, z: 0 }, true); // 위치 초기화
           rb.current.setLinvel({ x: 0, y: 0, z: 0 }, true); // 속도 초기화
         }
+        setCharacterPosition({ x: position.x, y: position.y, z: position.z }); // store에 위치 업데이트
       }
 
       character.current.rotation.y = lerpAngle(

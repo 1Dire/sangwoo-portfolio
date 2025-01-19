@@ -2,33 +2,32 @@ import React, { useState, useRef, useEffect } from "react";
 
 export default function Cd({ currentAudio }) {
   const [isRotating, setIsRotating] = useState(true);
-  const [currentRotation, setCurrentRotation] = useState(0);
+  const rotationRef = useRef(0);  // currentRotation을 useRef로 변경
   const rotationInterval = useRef(null);
   const cdRef = useRef(null);
   const muteBarRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(mediaQuery.matches);
     };
-    window.addEventListener("resize", handleResize);
-    handleResize();
+
+    mediaQuery.addEventListener("change", handleResize);
+    handleResize();  // 초기 상태 설정
 
     return () => {
-      window.removeEventListener("resize", handleResize);
+      mediaQuery.removeEventListener("change", handleResize);
     };
   }, []);
 
   const startRotation = () => {
     rotationInterval.current = setInterval(() => {
-      setCurrentRotation((prev) => {
-        const newRotation = prev + 1;
-        if (cdRef.current) {
-          cdRef.current.style.transform = `rotate(${newRotation}deg)`;
-        }
-        return newRotation;
-      });
+      rotationRef.current += 1;
+      if (cdRef.current) {
+        cdRef.current.style.transform = `rotate(${rotationRef.current}deg)`;
+      }
     }, 10);
   };
 
@@ -39,31 +38,24 @@ export default function Cd({ currentAudio }) {
   const handleRotationToggle = () => {
     if (isRotating) {
       stopRotation();
-      currentAudio.volume(0);
+      currentAudio.pause(); // 음악 일시 정지
     } else {
       startRotation();
-      currentAudio.volume(1);
+      if (!currentAudio.playing()) {
+        currentAudio.play(); // 음악 재생
+      }
     }
     setIsRotating(!isRotating);
-
-    if (currentAudio.playing() === false) {
-      currentAudio
-        .play()
-        .catch((err) => console.error("오디오 재생 오류:", err));
-    }
   };
 
   useEffect(() => {
-    startRotation();
-    return () => stopRotation();
-  }, []);
-
-  useEffect(() => {
     if (isRotating) {
-      currentAudio.volume(1);
+      startRotation();
     } else {
-      currentAudio.volume(0);
+      stopRotation();
     }
+
+    return () => stopRotation();
   }, [isRotating]);
 
   return (
@@ -80,7 +72,7 @@ export default function Cd({ currentAudio }) {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          transform: `rotate(${currentRotation}deg)`,
+          transform: `rotate(${rotationRef.current}deg)`, // useRef로 변경
           opacity: isMobile ? 1 : 0.5,
           transition: "opacity 0.3s ease",
         }}
