@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
 import { useGLTF } from "@react-three/drei";
 import { RigidBody } from "@react-three/rapier";
@@ -11,7 +11,7 @@ useGLTF.preload("./models/keyKit/object/watermill.glb");
 function WatermillGenerate({ item, index }) {
   const model = useGLTF("./models/keyKit/object/watermill.glb");
   const wheelRef = useRef();
-  
+
   // Shadow 설정
   model.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
@@ -39,15 +39,25 @@ function WatermillGenerate({ item, index }) {
       },
       show: true,
       clickEvent: false,
-      rotationSpeed: { value: 1, min: 0, max: 10, step: 0.1 }, // 회전 속도 설정
+      rotationSpeed: { value: 1, min: 0, max: 10, step: 0.1 },
     },
     { collapsed: true }
   );
 
-  // 물레방아 휠 회전 처리 (회전 속도를 반영)
+  // 물레방아 휠 참조 설정
+  useEffect(() => {
+    const wheel = model.scene.getObjectByName("watermill_wheel");
+    if (wheel) {
+      wheelRef.current = wheel; // wheelRef에 저장
+    } else {
+      console.warn("watermill_wheel을 찾을 수 없습니다.");
+    }
+  }, [model]);
+
+  // 물레방아 휠 회전 처리
   useFrame((state, delta) => {
     if (wheelRef.current) {
-      wheelRef.current.rotation.x += rotationSpeed * delta; // rotationSpeed에 delta를 곱하여 회전 속도 적용
+      wheelRef.current.rotation.x += rotationSpeed * delta; // 적절한 축에 delta 적용
     }
   });
 
@@ -77,12 +87,6 @@ function WatermillGenerate({ item, index }) {
           <primitive
             object={model.scene.clone()}
             dispose={null}
-            onUpdate={(self) => {
-              const wheel = self.getObjectByName("watermill_wheel");
-              if (wheel) {
-                wheelRef.current = wheel; // watermill_wheel을 wheelRef에 저장
-              }
-            }}
           />
         </RigidBody>
       )}
