@@ -41,7 +41,7 @@ export default function Info() {
         </div>
         <div className="text">
           <h2>Dire</h2>
-          <h3 className="name">sangwoo Lee</h3>
+          <h3 className="name">Sangwoo Lee</h3>
         </div>
         <div className="button-div mb-2">
           <div className="github">
